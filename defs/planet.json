@@ -1,0 +1,15 @@
+{
+    "name": "Planet",
+    "type": "static",
+    "description": "Earth",
+    "shape": "omni",
+    "radius": 50,
+    "friction": {
+      "collision": 0,
+      "linear": 40,
+      "rotational": 600
+    },
+    "sensors": [],
+    "mass": 58800000000000000000000000 ,   
+    "controller": "lib/planet.so"
+}
