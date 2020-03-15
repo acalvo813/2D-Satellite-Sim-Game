@@ -97,10 +97,10 @@ class SpaceController : public Process, public AgentInterface {
         //omni_apply_force(g(x()),g(y()));    
 
         //when keys randomly stop working.... uncomment below to debug
-        label("actual fx "+ to_string(actualfx)+ " actual fy "+to_string(actualfy),0,20);
-        omni_apply_force(actualfx,actualfy);
+        // label("actual fx "+ to_string(actualfx)+ " actual fy "+to_string(actualfy),0,20);
+        // omni_apply_force(actualfx,actualfy);
 
-        //omni_apply_force(actualfx+g(x()),actualfy+g(y()));
+        omni_apply_force(actualfx+g(x()),actualfy+g(y()));
 
         // label("ag-atan is "+ to_string(realangle()-atan2(x(),-y()))+ " pointgatorigin is "+to_string(pointingatorigin()),0,15);
         // label("angular velocity "+to_string(angular_velocity())+ " pointgatorigin is "+to_string(pointingatorigin()),20,0);
