@@ -103,18 +103,21 @@ class SpaceController : public Process, public AgentInterface {
 
         omni_apply_force(actualfx+g(x()),actualfy+g(y()));
 
-        //label("ag-atan is "+ to_string(realangle()-atan2(x(),-y()))+ " pointgatorigin is "+to_string(pointingatorigin()),0,15);
-        //label("angular velocity "+to_string(angular_velocity())+ " pointgatorigin is "+to_string(pointingatorigin()),20,0);
+        //label("real angle "+ to_string(realangle())+" built in angle() "+to_string(angle()),0,20);
+        //label("ag-atan is "+ to_string(realangle()-angleoforigin())+ " pointgatorigin is "+to_string(pointingatorigin()),0,15);
+        label("angular velocity "+to_string(angular_velocity())+ " pointgatorigin is "+to_string(pointingatorigin()),20,0);
 
         if (!pointingatorigin()){
                 //double fr=VEL_R*atan2(x(),-y());
                 allow_rotation();
-                double fr=-VEL_R*(realangle()-atan2(x(),-y()));
+                double fr=-VEL_R*(realangle()-angleoforigin());
                 double mag=0.01;
                 //fr=-K_X*(angular_velocity()+0.001);
             
                 // need to apply for based off its current angular velocity = -K_X*(0-vy);
-            apply_force(0,fr*100);
+                if (x()!=0){
+                 apply_force(0,fr*100);
+                }
             //label("angular velocity "+to_string(angular_velocity())+ "is fr "+to_string(fr),20,0);
 
             // if (abs(angular_velocity())>mag){ 
@@ -132,20 +135,22 @@ class SpaceController : public Process, public AgentInterface {
         }
         else{
             //prevent_rotation();
-            if (abs(angular_velocity())>0.01 && !STABILIZING){ 
+                if (abs(angular_velocity())>0.01 && !STABILIZING){ 
                 STABILIZING=true;
-                double vr=10000000;
-                while (vr>100){
+                if (vr>0){
                     apply_force(0,-angular_velocity()*vr);
-                    vr=vr/2;
+                    vr=vr/10;
+                }else{
+                    STABILIZING=false;
+                    vr=10000000;
                 }
-                STABILIZING=false;
+                
 
             }
 
         }
         
-        
+      
         //apply_force(100,0);
 
         // if (x()!=0){
@@ -168,6 +173,7 @@ class SpaceController : public Process, public AgentInterface {
    
     double vx;
     double vy;
+    double vr=1000;
     
     const double G = 0.098;
     const double VEL_X = 20;
@@ -180,11 +186,15 @@ class SpaceController : public Process, public AgentInterface {
     private:
     bool pointingatorigin(){
         bool a;
-            a= abs(realangle()-atan2(x(),-y()))<0.01;
+            a= abs(realangle()-angleoforigin())<0.15;
         return a;
     }
     double realangle(){
         return remainder(angle(),2*3.14);
+    }
+    double angleoforigin(){
+       double a= atan2(x(),-y());
+       return a;
     }
 
 };
