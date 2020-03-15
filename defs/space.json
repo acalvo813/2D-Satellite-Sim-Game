@@ -10,8 +10,8 @@
     ],
     "friction": {
       "collision": 0,
-      "linear": 0,
-      "rotational": 0
+      "linear": 1,
+      "rotational": 1
     },
     "sensors": [
       { 

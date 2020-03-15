@@ -31,6 +31,7 @@ class SpaceController : public Process, public AgentInterface {
 
     void init() {
         allow_rotation();
+        STABILIZING=false;
         watch("keydown", [&](Event& e) {
             std::string k = e.value()["key"];
             if ( k == "w" ) {
@@ -98,34 +99,51 @@ class SpaceController : public Process, public AgentInterface {
 
         //when keys randomly stop working.... uncomment below to debug
         // label("actual fx "+ to_string(actualfx)+ " actual fy "+to_string(actualfy),0,20);
-        // omni_apply_force(actualfx,actualfy);
+        //omni_apply_force(actualfx,actualfy);
 
         omni_apply_force(actualfx+g(x()),actualfy+g(y()));
 
-        // label("ag-atan is "+ to_string(realangle()-atan2(x(),-y()))+ " pointgatorigin is "+to_string(pointingatorigin()),0,15);
-        // label("angular velocity "+to_string(angular_velocity())+ " pointgatorigin is "+to_string(pointingatorigin()),20,0);
+        //label("ag-atan is "+ to_string(realangle()-atan2(x(),-y()))+ " pointgatorigin is "+to_string(pointingatorigin()),0,15);
+        //label("angular velocity "+to_string(angular_velocity())+ " pointgatorigin is "+to_string(pointingatorigin()),20,0);
 
-        // if (!pointingatorigin()){
-        //         //double fr=VEL_R*atan2(x(),-y());
-        //         double fr=-VEL_R*(realangle()-atan2(x(),-y()));
-        //         double mag=0.001;
-        //         //fr=-K_X*(angular_velocity()+0.001);
+        if (!pointingatorigin()){
+                //double fr=VEL_R*atan2(x(),-y());
+                allow_rotation();
+                double fr=-VEL_R*(realangle()-atan2(x(),-y()));
+                double mag=0.01;
+                //fr=-K_X*(angular_velocity()+0.001);
             
-        //         // need to apply for based off its current angular velocity = -K_X*(0-vy);
-        //         //apply_force(0,fr);
-        //     if (abs(angular_velocity())>mag){ 
-        //         if (angular_velocity()<0)
-        //         {
-        //             apply_force(0,-angular_velocity());
-        //         }else{
-        //             apply_force(0,-angular_velocity());
-        //         }
+                // need to apply for based off its current angular velocity = -K_X*(0-vy);
+            apply_force(0,fr*100);
+            //label("angular velocity "+to_string(angular_velocity())+ "is fr "+to_string(fr),20,0);
+
+            // if (abs(angular_velocity())>mag){ 
+            //     if (angular_velocity()<0)
+            //     {
+            //         apply_force(0,-angular_velocity());
+            //     }else{
+            //         apply_force(0,-angular_velocity());
+            //     }
                  
-        //     }else{
-        //         apply_force(0,-VEL_R*(realangle()-atan2(x(),-y())));
-        //     }
+            // }else{
+            //     apply_force(0,-VEL_R*(realangle()-atan2(x(),-y())));
+            // }
             
-        // }
+        }
+        else{
+            //prevent_rotation();
+            if (abs(angular_velocity())>0.01 && !STABILIZING){ 
+                STABILIZING=true;
+                double vr=10000000;
+                while (vr>100){
+                    apply_force(0,-angular_velocity()*vr);
+                    vr=vr/2;
+                }
+                STABILIZING=false;
+
+            }
+
+        }
         
         
         //apply_force(100,0);
@@ -150,17 +168,19 @@ class SpaceController : public Process, public AgentInterface {
    
     double vx;
     double vy;
+    
     const double G = 0.098;
     const double VEL_X = 20;
     const double VEL_Y = 20;
     const double VEL_R = 2000;
     const double K_X = 1500;
     bool LEFT, RIGHT, UP,DOWN;
+    bool STABILIZING;
 
     private:
     bool pointingatorigin(){
         bool a;
-            a= abs(realangle()-atan2(x(),-y()))<0.2;
+            a= abs(realangle()-atan2(x(),-y()))<0.01;
         return a;
     }
     double realangle(){

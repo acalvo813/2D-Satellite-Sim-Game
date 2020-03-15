@@ -18,34 +18,8 @@
                 "y": -200, 
                 "theta": 0
             }
-        },
-        {
-            "definition": "defs/space.json",
-            "style": { "fill": "lightblue", "stroke": "black" },
-            "position": {
-                "x": 0, 
-                "y": 200, 
-                "theta": 3.14
-            }
-        },
-        {
-            "definition": "defs/space.json",
-            "style": { "fill": "lightblue", "stroke": "black" },
-            "position": {
-                "x": 200, 
-                "y": 0, 
-                "theta": 1.57
-            }
-        },
-        {
-            "definition": "defs/space.json",
-            "style": { "fill": "lightblue", "stroke": "black" },
-            "position": {
-                "x": 200, 
-                "y": -200, 
-                "theta": 0.785
-            }
         }
+
 
         
         
