@@ -6,6 +6,7 @@
 using namespace enviro;
 
 class PlanetController : public Process, public AgentInterface {
+// a planet object which is completely static. Provides a place for the satellites to land on rotate around crash etc.... 
 
     public:
     PlanetController() : Process(), AgentInterface() {}

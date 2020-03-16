@@ -11,15 +11,21 @@ using namespace std;
 
 
 class SpaceController : public Process, public AgentInterface {
-
+// controls a generic space object. Specifically catered to satellites but could be inherited for other space type objects
     public:
     SpaceController() : Process(), AgentInterface(), LEFT(false), RIGHT(false), UP(false), DOWN(false){}
+    
 
     double height() {
+        //return the botom sensors distance to whatever is beneath it. If it is not pointing a the planet it is at a its maximum or 
+        // it may be pointing a satellite beneath it
         return sensor_value(0);
     }
     
     double g(double pos){
+        //takes in a double representing the position and returns the gravity to be applied in the update function
+
+
         //cannot apply forces on after another it seems
         //omni_apply_force(-(x()*x())*G,-(y()*y())*G);
         //apply_force(0,cos(x())*100);
@@ -42,6 +48,7 @@ class SpaceController : public Process, public AgentInterface {
 
 
     void addinputkeys(){
+        //adds the input keys  in the update function. Depending on the state set from the init keys the velocty is updated
         if ( RIGHT ) {
             vx = VEL_X;
             
@@ -62,6 +69,7 @@ class SpaceController : public Process, public AgentInterface {
 
     }
     void initinputkeys(){
+        //initializes the keyboard events and assigns them to the appropriate steps then used in add keys through update
         watch("keydown", [&](Event& e) {
             std::string k = e.value()["key"];
             if ( k == "w" ) {
@@ -90,6 +98,8 @@ class SpaceController : public Process, public AgentInterface {
     }
 
     void init() {
+        // init function run at the initialization
+        //allow oratition and set default private states
         allow_rotation();
         STABILIZING=false;
         STABLE=true;
@@ -98,6 +108,11 @@ class SpaceController : public Process, public AgentInterface {
     void start() {}
 
     void update() {
+        // run frequently
+        // adds the input keys ( allows wasd to be read in from the keyboard)
+        // based on the wasd values it applies directional forces
+        // applies gravitational forces
+        // applies rotational forces to ensure the system is pointing in the right direction
         double fx=0;
         double fy=0;
         double m=0;
@@ -244,15 +259,18 @@ class SpaceController : public Process, public AgentInterface {
 
     private:
     bool pointingatorigin(){
+        // returns a boolean which determines wether the satellite is pointing at the origin with a given tolerance
         bool a;
             a= abs(realangle()-angleoforigin())<0.15;
         return a;
     }
     double realangle(){
+        // take the input angle and transform it to be from 0 to 2pi instead of infinite
         return remainder(angle(),2*3.14);
     }
     double angleoforigin(){
-        
+        // calculates the angle of the origin using the x and y location along with the real angle
+
        double a= atan2(x(),-y());
        a=remainder(a,2*3.14);
       if (abs(realangle()-a)>2){ // if at arc tan - pi pi point
