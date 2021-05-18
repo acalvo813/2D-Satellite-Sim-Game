@@ -1,7 +1,7 @@
 # 2D-Satellite-Sim-Game
 ## Overview:
 Sattelite Sim game is a game based around a 2 dimensional satellite simulator. The project has a dual purpose. It functions as a game and simulator. The game is meant to both provide a source of entertainment for players and also provide an environment to run a quick test of digital control systems. 
-The purpose of the game is to use the satellite's thrusters to keep them in orbiting safely. Since these objects are subject to gravity the player has to use the thrusters to keep them in orbit. In order to do so the player must use thrusters to balance between crashing into the planet, completely escaping the planets pull, and spinning out of control. The code is based off of the enviro reposistory. More infomration can be found at: https://github.com/klavinslab/enviro
+The purpose of the game is to use the satellite's thrusters to keep them in orbiting safely. Since these objects are subject to gravity the player has to use the thrusters to keep them in orbit. In order to do so the player must use thrusters to balance between crashing into the planet, completely escaping the planets pull, and spinning out of control. The code is based off of the enviro reposistory. More information can be found at: https://github.com/klavinslab/enviro
 
 ## How to install and run the code
 (This assumes you Have installed docker)
